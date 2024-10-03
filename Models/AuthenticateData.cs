@@ -29,6 +29,7 @@ public class RegisterModel
 
     [Required(ErrorMessage = "Password is required")]
     public string? Password { get; set; }
+    public string Role { get; set; } = UserRoles.User;
 }
 
 public static class UserRoles

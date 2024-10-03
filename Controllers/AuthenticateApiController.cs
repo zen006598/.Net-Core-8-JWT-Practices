@@ -82,6 +82,17 @@ public class AuthenticateApiController(
             });
         }
 
+        if (!string.IsNullOrEmpty(parameters.Role))
+        {
+            if (!await _roleManager.RoleExistsAsync(parameters.Role))
+            {
+                await _roleManager.CreateAsync(new IdentityRole(parameters.Role));
+            }
+
+            await _userManager.AddToRoleAsync(user, parameters.Role);
+        }
+
+
         return Ok(new { Status = "Success", Message = "User created successfully!" });
     }
 
