@@ -99,7 +99,7 @@ public class AuthenticateApiController(
     private JwtSecurityToken CreateToken(List<Claim> claims)
     {
         var secretkey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(
-            _configuration.GetValue<string>("JwtSettings:Secret")));    // _configuration.GetSection("JwtSettings:Secret").Value)
+            _configuration.GetValue<string>("JwtSettings:Secret")));
 
         var credentials = new SigningCredentials(secretkey, SecurityAlgorithms.HmacSha512Signature);
 

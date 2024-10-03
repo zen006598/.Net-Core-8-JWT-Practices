@@ -14,12 +14,14 @@ public class BookApiController(
 {
     private readonly ApplicationDbContext _dbContext = dbContext;
     [HttpGet]
+    [AllowAnonymous]
     public async Task<ActionResult<IEnumerable<Book>>> GetBooks()
     {
         return Ok(await _dbContext.Books.ToListAsync());
     }
 
     [HttpGet("{id}")]
+    [AllowAnonymous]
     public async Task<ActionResult<Book>> GetBook(int id)
     {
         var book = await _dbContext.Books.FirstOrDefaultAsync(b => b.Id == id);
@@ -54,6 +56,7 @@ public class BookApiController(
     }
 
     [HttpDelete("{id}")]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> DeleteBookAsync(int id)
     {
         var book = await _dbContext.Books.FirstOrDefaultAsync(b => b.Id == id);
