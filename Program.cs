@@ -5,10 +5,31 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "IdentityJWTDemo", Version = "v1" });
+    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        In = ParameterLocation.Header,
+        Description = "Please enter JWT with Bearer into field",
+        Name = "Authorization",
+        Type = SecuritySchemeType.ApiKey
+    });
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+                {
+                    Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "Bearer"}
+                },
+            new string[] {}
+        }
+    });
+});
 
 
 // database connection
