@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using IdentityJWTDemo.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,5 +12,7 @@ public partial class ApplicationDbContext : IdentityDbContext<IdentityUser>
     {
         base.OnModelCreating(modelBuilder);
     }
-    public DbSet<Book> Books { get; set; }
+    public virtual DbSet<Book> Books { get; set; }
+
+    public virtual DbSet<RefreshToken> RefreshTokens { get; set; }
 }
