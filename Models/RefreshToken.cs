@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 
 namespace IdentityJWTDemo.Models;
-
 public class RefreshToken
 {
     public int Id { get; set; }
