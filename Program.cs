@@ -47,6 +47,18 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>()
 
 builder.Services.Configure<IdentityOptions>(builder.Configuration.GetSection("IdentityOptions"));
 
+var tokenValidationParameters = new TokenValidationParameters
+{
+    ValidateIssuerSigningKey = true,
+    ValidateIssuer = true,
+    ValidateAudience = true,
+    ValidAudience = builder.Configuration["JwtSettings:ValidAudience"],
+    ValidIssuer = builder.Configuration["JwtSettings:ValidIssuer"],
+    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JwtSettings:Secret"])),
+    ValidateLifetime = true,
+    ClockSkew = TimeSpan.Zero
+};
+
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -57,16 +69,10 @@ builder.Services.AddAuthentication(options =>
 {
     options.SaveToken = true;
     options.RequireHttpsMetadata = false;
-    options.TokenValidationParameters = new TokenValidationParameters()
-    {
-        ValidateIssuerSigningKey = true,
-        ValidateIssuer = true,
-        ValidateAudience = true,
-        ValidAudience = builder.Configuration["JwtSettings:ValidAudience"],
-        ValidIssuer = builder.Configuration["JwtSettings:ValidIssuer"],
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JwtSettings:Secret"]))
-    };
+    options.TokenValidationParameters = tokenValidationParameters;
 });
+
+builder.Services.AddSingleton(tokenValidationParameters);
 
 var app = builder.Build();
 
